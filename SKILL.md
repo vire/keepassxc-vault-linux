@@ -19,7 +19,7 @@ The database defaults to `${KPXC_DB:-$HOME/.local/share/keepassxc/vault.kdbx}`. 
 3. Choose one safe sink:
    - A graphical human session: run `scripts/kpxc-secret clip <entry> [field] [timeout]`. The default field is `Password` and the default timeout is 20 seconds.
    - A program that accepts the secret on standard input: run `scripts/kpxc-secret pipe <entry> <field> -- <command> [args...]`.
-4. Report only whether the operation succeeded. Keep command output containing secrets out of tool results, chat, summaries, logs, and error reports.
+4. Report only whether the operation succeeded. Keep command output containing secrets out of tool results, chat, summaries, logs, and error reports. Treat empty output as failure: an unknown or misspelled FIELD name returns empty output with exit status 0, while an unknown ENTRY path exits non-zero. Only a wrong entry fails closed by itself.
 
 Use `pipe` only when the receiving command treats standard input as the secret and does not echo it. If the receiver requires the secret in an argument, environment variable, configuration file, or other persistent location, stop and explain that a safe adapter is required.
 
@@ -35,4 +35,4 @@ Use `pipe` only when the receiving command treats standard input as the secret a
 - Never store, update, clear, or accept the database password. Secret enrollment belongs to the human operator.
 - Never weaken the two-factor arrangement. The key file stays local and is never synchronized beside the database.
 
-If a binary, database, key file, D-Bus session, Secret Service provider, or unlocked collection is missing, stop without trying another secret source. Ask the human operator to follow [references/ubuntu-secret-service.md](references/ubuntu-secret-service.md).
+If a binary, database, key file, D-Bus session, Secret Service provider, or unlocked collection is missing, stop without trying another secret source. Ask the human operator to follow [references/ubuntu-secret-service.md](references/ubuntu-secret-service.md) for enrollment, [references/headless-keyring-setup.md](references/headless-keyring-setup.md) when no persistent Secret Service collection exists yet (typical on a headless host), and [references/key-file-format.md](references/key-file-format.md) when the key file is missing, of an unexpected format, or reported as an old key file format.
